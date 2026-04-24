@@ -2,57 +2,54 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 🌟 CONFIG PAGE
-st.set_page_config(
-    page_title="Dashboard Ventes",
-    page_icon="📊",
-    layout="wide"
-)
+# Configuration
+st.set_page_config(page_title="Dashboard Ventes", layout="wide")
 
-# 🎨 TITRE STYLE
-st.markdown(
-    "<h1 style='text-align: center; color: #4CAF50;'>📊 Analyse des Ventes</h1>",
-    unsafe_allow_html=True
-)
+st.title("Dashboard Analyse des Ventes")
 
-st.markdown("---")
+# Upload fichier
+uploaded_file = st.file_uploader("Uploader votre fichier CSV", type=["csv"])
 
-# 📂 CHARGEMENT DONNÉES
-df = pd.read_csv("vente.csv")
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
 
-# ⚙️ CALCULS
-df["CA_Brut"] = df["Prix"] * df["Quantite"]
-df["CA_Net"] = df["CA_Brut"] * (1 - df["Remise"] / 100)
-df["TVA"] = df["CA_Net"] * 0.2
+    # Vérification des colonnes
+    required_columns = {"ID", "Prix", "Quantite", "Remise"}
+    if not required_columns.issubset(df.columns):
+        st.error("Le fichier doit contenir les colonnes : ID, Prix, Quantite, Remise")
+        st.stop()
 
-# 💰 KPIs (cartes)
-col1, col2, col3 = st.columns(3)
+    # Calculs
+    df["CA_Brut"] = df["Prix"] * df["Quantite"]
+    df["CA_Net"] = df["CA_Brut"] * (1 - df["Remise"] / 100)
+    df["TVA"] = df["CA_Net"] * 0.2
 
-col1.metric("💰 CA Total", f"{df['CA_Net'].sum():.2f}")
-col2.metric("📦 Produits", len(df))
-col3.metric("🏆 Meilleur ID", df.loc[df["CA_Net"].idxmax(), "ID"])
+    # KPIs
+    col1, col2, col3 = st.columns(3)
+    col1.metric("CA Total", f"{df['CA_Net'].sum():,.2f}")
+    col2.metric("Nombre de produits", len(df))
+    col3.metric("Meilleur produit", df.loc[df["CA_Net"].idxmax(), "ID"])
 
-st.markdown("---")
+    st.markdown("---")
 
-# 📊 TABLEAU
-st.subheader("📋 Données détaillées")
-st.dataframe(df, use_container_width=True)
+    # Nouveau dataset
+    st.subheader("Dataset après calculs")
+    st.dataframe(df, use_container_width=True)
 
-# 📈 GRAPHIQUE
-st.subheader("📊 CA par produit")
+    st.markdown("---")
 
-fig, ax = plt.subplots()
-ax.bar(df["ID"], df["CA_Net"])
-ax.set_title("Chiffre d'affaires net")
-ax.set_xlabel("ID Produit")
-ax.set_ylabel("CA Net")
+    # Graphique
+    st.subheader("Chiffre d'affaires par produit")
 
-st.pyplot(fig)
+    df_sorted = df.sort_values(by="CA_Net", ascending=False)
 
-st.markdown("---")
+    fig, ax = plt.subplots()
+    ax.bar(df_sorted["ID"], df_sorted["CA_Net"])
+    ax.set_xlabel("ID Produit")
+    ax.set_ylabel("CA Net")
+    ax.set_title("CA Net par produit")
 
-# ✨ FOOTER
-st.markdown(
-    "<p style='text-align: center; color: grey;'>Dashboard créé avec Streamlit 🚀</p>",
-    unsafe_allow_html=True
-)
+    st.pyplot(fig)
+
+else:
+    st.info("Veuillez uploader un fichier CSV pour commencer.")
