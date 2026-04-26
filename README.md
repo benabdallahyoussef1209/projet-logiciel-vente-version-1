@@ -1,4 +1,4 @@
-#  Sales Data Generator & Analysis (Python)
+# Analyse des ventes et generation des données (Python)
 
 ##  Description
 Cette branche contient un script Python qui génère automatiquement un dataset de produits et réalise une analyse financière complète.
@@ -20,6 +20,8 @@ Cette branche contient un script Python qui génère automatiquement un dataset 
   - Produit le plus rentable
 - Visualisation avec matplotlib
 ---
+#### Génération du graphe
+Le graphe des performances des produits est généré automatiquement et **enregistré sous forme de fichier image**
 ### Résultats
 -Dataset généré automatiquement
 -Dataset enrichi avec indicateurs financiers
