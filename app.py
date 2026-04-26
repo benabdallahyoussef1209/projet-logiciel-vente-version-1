@@ -19,6 +19,13 @@ option = st.sidebar.radio(
     ["Générer un dataset", "Uploader un fichier"]
 )
 
+
+# =========================
+# 1. Demander nombre de produits
+# =========================
+n = int(input("Combien de produits ? "))
+
+
 # =========================
 # Génération dataset
 # =========================
