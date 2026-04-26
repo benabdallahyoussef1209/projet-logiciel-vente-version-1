@@ -40,4 +40,4 @@ streamlit run app.py
 `````
 Application en ligne
 
-Lien vers l’application Streamlit : https://projet-logiciel-vente-version-1-suyt238tasusiyj4gncgen.streamlit.app/
+Lien vers l’application Streamlit : https://projet-logiciel-vente-version-1-8mpq4juappeqjq2hwtvzg7y.streamlit.app/
