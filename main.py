@@ -51,11 +51,9 @@ print("Produit le plus rentable =", produit_max)
 
 # =========================
 # 5. Graphique
-# =========================
-<<<<<<< HEAD
+# ====================
 import matplotlib.pyplot as plt
-=======
->>>>>>> 77179b1 (modification plot)
+
 
 n = len(df)
 
