@@ -83,20 +83,46 @@ if not df.empty:
     col2.metric("Nombre de Produits", nb_produits)
     col3.metric("ID Produit le plus rentable", top_produit)
 
-    # =========================
+# =========================
     # 4. Graphique
     # =========================
     st.markdown("---")
     st.subheader("4. Graphique du CA Net par Produit")
     
-    # On trie pour avoir un graphique lisible
-    df_plot = df.sort_values(by="CA_Net", ascending=False).head(30)
-    fig, ax = plt.subplots(figsize=(12, 5))
-    ax.bar(df_plot["ID"].astype(str), df_plot["CA_Net"], color="skyblue")
+    # On trie les données par CA Net (décroissant) pour une meilleure lecture
+    df_plot = df.sort_values(by="CA_Net", ascending=False)
+    n_rows = len(df_plot)
+
+    # Création de la figure (Largeur 16 pour bien voir les barres)
+    fig, ax = plt.subplots(figsize=(16, 8))
     
-    plt.xticks(rotation=45)
-    ax.set_ylabel("CA Net")
+    indices = range(n_rows)
+    ax.bar(indices, df_plot["CA_Net"], color="skyblue", edgecolor="navy")
+    
+    # Gestion de l'affichage des IDs sur l'axe X
+    # Si tu as beaucoup de produits, on réduit la police et on tourne à 90°
+    if n_rows <= 30:
+        step = 1
+        rotation = 45
+        size = 10
+    else:
+        # Pour 50 produits et plus, on affiche tout mais en petit et vertical
+        step = 1 
+        rotation = 90
+        size = 8
+
+    ax.set_xticks(indices[::step])
+    ax.set_xticklabels(df_plot["ID"].iloc[::step], rotation=rotation, fontsize=size)
+    
+    ax.set_ylabel("Chiffre d'Affaires Net")
     ax.set_xlabel("ID Produit")
+    ax.set_title(f"Performance des {n_rows} produits")
+    
+    # Ajout d'une grille pour mieux lire les montants
+    ax.grid(axis='y', linestyle='--', alpha=0.6)
+
+    # Ajustement automatique pour ne pas couper les labels en bas
+    plt.tight_layout()
     
     st.pyplot(fig)
 
