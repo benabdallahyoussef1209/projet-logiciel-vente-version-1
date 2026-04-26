@@ -8,6 +8,7 @@ Cette branche contient un script Python qui génère automatiquement un dataset 
 ##  Fonctionnalités
 - Génération aléatoire de produits
 - Attributs :
+  - ID
   - Prix
   - Quantité
   - Remise
