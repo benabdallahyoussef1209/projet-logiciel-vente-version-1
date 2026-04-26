@@ -1,33 +1,82 @@
+import matplotlib
+matplotlib.use('Agg')  # backend sans interface graphique
+import matplotlib.pyplot as plt
 import pandas as pd
+import random
 
-# Lire le fichier
-df = pd.read_csv("vente.csv")
+# =========================
+# 1. Demander nombre de produits
+# =========================
+n = int(input("Combien de produits ? "))
 
-# CA Brut
+# =========================
+# 2. Génération dataset
+# =========================
+data = []
+
+for i in range(1, n + 1):
+    data.append([
+        f"{i}",
+        random.randint(10, 1000),
+        random.randint(1, 10),
+        random.randint(0, 50)
+    ])
+
+df = pd.DataFrame(data, columns=["ID", "Prix", "Quantite", "Remise"])
+
+# Sauvegarde CSV
+df.to_csv("vente.csv", index=False)
+
+print("\nDataset généré :")
+print(df)
+
+# =========================
+# 3. Calculs
+# =========================
 df["CA_Brut"] = df["Prix"] * df["Quantite"]
-
-# CA Net
 df["CA_Net"] = df["CA_Brut"] * (1 - df["Remise"] / 100)
-
-# TVA
 df["TVA"] = df["CA_Net"] * 0.2
 
-# CA Total
+print("\nDataset après calculs :")
+print(df)
+
+# =========================
+# 4. KPIs
+# =========================
 ca_total = df["CA_Net"].sum()
-print("CA Total =", ca_total)
-
-# Produit le plus rentable
 produit_max = df.loc[df["CA_Net"].idxmax(), "ID"]
-print("Produit le plus rentable ID =", produit_max)
 
-# Export fichier final
+print("\nCA Total =", ca_total)
+print("Produit le plus rentable =", produit_max)
+
+# =========================
+# 5. Graphique
+# =========================
+n = len(df)
+
+if n <= 10:
+    step = 1   # afficher tous les IDs
+elif n <= 50:
+    step = 5
+else:
+    step = 10
+
+plt.figure(figsize=(12,5))
+plt.bar(df["ID"], df["CA_Net"])
+
+plt.xticks(df["ID"][::step])
+
+plt.xlabel("Produit ID")
+plt.ylabel("CA Net")
+plt.title("CA Net par Produit")
+
+plt.tight_layout()
+plt.savefig("graph.png")
+print("Graph saved as graph.png")
+
+# =========================
+# 6. Export final
+# =========================
 df.to_csv("resultats_final.csv", index=False)
 
-print("Export terminé")
-import matplotlib.pyplot as plt
-
-plt.bar(df["ID"], df["CA_Net"])
-plt.title("CA par produit")
-plt.xlabel("ID")
-plt.ylabel("CA Net")
-plt.show()
+print("\nExport terminé : resultats_final.csv")
