@@ -52,27 +52,30 @@ print("Produit le plus rentable =", produit_max)
 # =========================
 # 5. Graphique
 # =========================
+import matplotlib.pyplot as plt
+
+import matplotlib.pyplot as plt
+
+import matplotlib.pyplot as plt
+
 n = len(df)
 
-if n <= 10:
-    step = 1   # afficher tous les IDs
-elif n <= 50:
-    step = 5
-else:
-    step = 10
+# On définit 'step' pour n'afficher qu'environ 10 à 15 labels max
+# Si n=100, step=10. Si n=50, step=5.
+step = max(1, n // 10) 
 
 plt.figure(figsize=(12,5))
-plt.bar(df["ID"], df["CA_Net"])
+plt.bar(df["ID"].astype(str), df["CA_Net"])
 
-plt.xticks(df["ID"][::step])
+# On applique le pas dynamique
+plt.xticks(range(0, n, step), df["ID"].iloc[::step], rotation=45)
 
 plt.xlabel("Produit ID")
 plt.ylabel("CA Net")
-plt.title("CA Net par Produit")
+plt.title(f"CA Net par Produit (Echelle 1/{step})")
 
 plt.tight_layout()
 plt.savefig("graph.png")
-print("Graph saved as graph.png")
 
 # =========================
 # 6. Export final
