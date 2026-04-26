@@ -35,7 +35,7 @@ option = st.sidebar.radio(
 df = pd.DataFrame()
 
 # =========================
-# 1. Chargement et Affichage Dataset Initial
+# 1. Chargement et Validation des données
 # =========================
 if option == "Générer un dataset":
     n_input = st.sidebar.number_input("Nombre de produits", min_value=1, max_value=500, value=50)
@@ -46,9 +46,22 @@ if option == "Générer un dataset":
     st.dataframe(df, use_container_width=True)
 
 else:
+    # Message d'instruction pour l'utilisateur
+    st.sidebar.info("Le fichier CSV doit contenir les colonnes : ID, Prix, Quantite, Remise")
+    
     uploaded_file = st.sidebar.file_uploader("Uploader votre fichier CSV", type=["csv"])
+    
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
+        
+        # Vérification automatique des colonnes
+        colonnes_attendues = {"ID", "Prix", "Quantite", "Remise"}
+        if not colonnes_attendues.issubset(set(df.columns)):
+            st.error("Erreur : Le format du fichier est incorrect.")
+            st.write(f"Colonnes detectees : {list(df.columns)}")
+            st.write(f"Colonnes requises : {list(colonnes_attendues)}")
+            st.stop() # Bloque l'exécution
+            
         st.subheader("1. Dataset uploade")
         st.dataframe(df, use_container_width=True)
     else:
@@ -83,30 +96,25 @@ if not df.empty:
     col2.metric("Nombre de Produits", nb_produits)
     col3.metric("ID Produit le plus rentable", top_produit)
 
-# =========================
+    # =========================
     # 4. Graphique
     # =========================
     st.markdown("---")
     st.subheader("4. Graphique du CA Net par Produit")
     
-    # On trie les données par CA Net (décroissant) pour une meilleure lecture
     df_plot = df.sort_values(by="CA_Net", ascending=False)
     n_rows = len(df_plot)
 
-    # Création de la figure (Largeur 16 pour bien voir les barres)
     fig, ax = plt.subplots(figsize=(16, 8))
-    
     indices = range(n_rows)
     ax.bar(indices, df_plot["CA_Net"], color="skyblue", edgecolor="navy")
     
-    # Gestion de l'affichage des IDs sur l'axe X
-    # Si tu as beaucoup de produits, on réduit la police et on tourne à 90°
+    # Style dynamique de l'axe X
     if n_rows <= 30:
         step = 1
         rotation = 45
         size = 10
     else:
-        # Pour 50 produits et plus, on affiche tout mais en petit et vertical
         step = 1 
         rotation = 90
         size = 8
@@ -117,11 +125,7 @@ if not df.empty:
     ax.set_ylabel("Chiffre d'Affaires Net")
     ax.set_xlabel("ID Produit")
     ax.set_title(f"Performance des {n_rows} produits")
-    
-    # Ajout d'une grille pour mieux lire les montants
     ax.grid(axis='y', linestyle='--', alpha=0.6)
-
-    # Ajustement automatique pour ne pas couper les labels en bas
     plt.tight_layout()
     
     st.pyplot(fig)
