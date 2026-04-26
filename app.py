@@ -97,18 +97,35 @@ col3.metric("Meilleur produit", df.loc[df["CA_Net"].idxmax(), "ID"])
 st.markdown("---")
 
 # =========================
+# =========================
 # Graphique
 # =========================
 st.subheader("Chiffre d'affaires par produit")
 
-df_sorted = df.sort_values(by="CA_Net", ascending=False)
+# 1. On trie les données et on réinitialise l'index pour que le calcul du step soit juste
+df_sorted = df.sort_values(by="CA_Net", ascending=False).reset_index(drop=True)
 
-fig, ax = plt.subplots()
-ax.bar(df_sorted["ID"], df_sorted["CA_Net"])
+# 2. Calcul du nombre de produits et du pas (step)
+n = len(df_sorted)
+step = max(1, n // 10)  # Affiche environ 10 labels maximum
+
+# 3. Création de la figure
+fig, ax = plt.subplots(figsize=(12, 6))
+
+# 4. Tracé des barres (on utilise range(n) pour s'assurer que les barres sont bien alignées)
+ax.bar(range(n), df_sorted["CA_Net"], color="skyblue", edgecolor="navy")
+
+# 5. Application de ton échelle dynamique
+ax.set_xticks(range(0, n, step))
+ax.set_xticklabels(df_sorted["ID"].iloc[::step], rotation=45, ha='right')
+
+# 6. Habillage
 ax.set_xlabel("ID Produit")
 ax.set_ylabel("CA Net")
-ax.set_title("CA Net par produit")
+ax.set_title(f"CA Net par produit (Échelle d'affichage : 1/{step})")
+ax.grid(axis='y', linestyle='--', alpha=0.7)
 
+# 7. Affichage dans Streamlit
 st.pyplot(fig)
 # =========================
 # Download
