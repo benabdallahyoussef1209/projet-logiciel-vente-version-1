@@ -52,13 +52,9 @@ print("Produit le plus rentable =", produit_max)
 # =========================
 # 5. Graphique
 # ====================
-import matplotlib.pyplot as plt
-
 
 n = len(df)
 
-# On définit 'step' pour n'afficher qu'environ 10 à 15 labels max
-# Si n=100, step=10. Si n=50, step=5.
 step = max(1, n // 10) 
 
 plt.figure(figsize=(12,5))
