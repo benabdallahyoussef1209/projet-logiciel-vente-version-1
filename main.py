@@ -54,10 +54,6 @@ print("Produit le plus rentable =", produit_max)
 # =========================
 import matplotlib.pyplot as plt
 
-import matplotlib.pyplot as plt
-
-import matplotlib.pyplot as plt
-
 n = len(df)
 
 # On définit 'step' pour n'afficher qu'environ 10 à 15 labels max
