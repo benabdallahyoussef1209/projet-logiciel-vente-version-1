@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt 
 import random
 
 # =========================
@@ -99,29 +99,17 @@ st.markdown("---")
 # =========================
 # Graphique
 # =========================
+st.subheader("Chiffre d'affaires par produit")
 
-df = pd.read_csv("resultats_final.csv")
+df_sorted = df.sort_values(by="CA_Net", ascending=False)
 
-# Histogramme
-fig1 = px.bar(df, x="ID", y="CA_Net", color="Remise")
+fig, ax = plt.subplots()
+ax.bar(df_sorted["ID"], df_sorted["CA_Net"])
+ax.set_xlabel("ID Produit")
+ax.set_ylabel("CA Net")
+ax.set_title("CA Net par produit")
 
-# Pie chart
-fig2 = px.pie(df, names="ID", values="CA_Net", title="Répartition du CA")
-
-# Scatter
-fig3 = px.scatter(
-    df,
-    x="Prix",
-    y="CA_Net",
-    size="Quantite",
-    color="Remise",
-    hover_data=["ID"]
-)
-
-fig1.show()
-fig2.show()
-fig3.show()
-
+st.pyplot(fig)
 # =========================
 # Download
 # =========================
