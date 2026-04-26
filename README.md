@@ -1,18 +1,48 @@
 # Dashboard Analyse des Ventes (Streamlit)
 
-Ce projet est une application web développée avec Streamlit permettant d’analyser des données de ventes et de visualiser les performances commerciales.
+Ce projet est une application web développée avec Streamlit permettant d’analyser des données de ventes, de calculer des indicateurs clés et de visualiser les performances commerciales.
+
+---
+
+## Objectif du projet
+
+Le projet répond à l’énoncé du PFA en intégrant :
+
+- Génération automatique du fichier `vente.csv` à partir d’un script Python
+- Traitement des données (calculs financiers)
+- Visualisation des résultats
+- Export des données finales
 
 ---
 
 ## Fonctionnalités
 
-- Chargement des données depuis un fichier CSV
-- Calcul du chiffre d’affaires brut et net
-- Affichage des données sous forme de tableau interactif
-- Visualisation des ventes par produit
-- Indicateurs clés de performance (KPI)
+### 1. Génération automatique des données
+- Création d’un fichier `vente.csv` contenant :
+  - ID
+  - Prix
+  - Quantite
+  - Remise
 
----
+### 2. Chargement des données
+- Utilisation du fichier généré automatiquement
+- Possibilité d’uploader un fichier CSV (fonctionnalité bonus)
+
+### 3. Calculs effectués
+- Chiffre d’affaires brut (CA_Brut)
+- Chiffre d’affaires net (CA_Net)
+- TVA
+
+### 4. Affichage des résultats
+- Dataset initial
+- Dataset après calculs
+- Indicateurs clés (KPI) :
+  - CA total
+  - Nombre de produits
+  - Produit le plus rentable
+
+### 5. Visualisation
+- Graphique du chiffre d’affaires par produit (Matplotlib)
 
 ## Technologies utilisées
 
@@ -20,9 +50,6 @@ Ce projet est une application web développée avec Streamlit permettant d’ana
 - Streamlit
 - Pandas
 - Matplotlib
-
----
-
 ## Lancer le projet en local
 
 ### Installer les dépendances
