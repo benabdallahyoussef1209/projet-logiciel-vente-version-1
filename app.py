@@ -27,9 +27,9 @@ def generate_data(n):
     for i in range(1, n + 1):
         data.append([
             f"{i}",
-            random.randint(10, 1000),
-            random.randint(1, 10),
-            random.randint(0, 50)
+            random.randint(10, 10000),
+            random.randint(1, 10000),
+            random.randint(0, 80)
         ])
     return pd.DataFrame(data, columns=["ID", "Prix", "Quantite", "Remise"])
 
